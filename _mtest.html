@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mobile preview harness (temporary)</title>
+<style>
+  html, body { margin: 0; }
+  body {
+    padding: 16px;
+    background: radial-gradient(90% 80% at 50% 0%, #241614, #0b0707 70%);
+    font: 12px/1.4 system-ui, sans-serif;
+    color: #b6a49a;
+  }
+  .stage { display: flex; gap: 16px; transform-origin: top left; }
+  .stage.zoomed { transform: scale(0.62); }
+  figure { margin: 0; }
+  figcaption { margin-bottom: 6px; letter-spacing: .12em; text-transform: uppercase; font-size: 10px; }
+  iframe {
+    display: block;
+    width: 390px;
+    height: 780px;
+    border: 1px solid #3a2723;
+    border-radius: 26px;
+    background: #130b0b;
+    box-shadow: 0 30px 80px -30px #000;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <figure><figcaption>Home</figcaption><iframe id="f1" src="index.html"></iframe></figure>
+    <figure><figcaption>Projects</figcaption><iframe id="f2" src="projects.html"></iframe></figure>
+    <figure><figcaption>Project detail</figcaption><iframe id="f3" src="project.html?id=aurelia"></iframe></figure>
+  </div>
+  <script>
+    var q = new URLSearchParams(location.search);
+    var stage = document.querySelector(".stage");
+    if (q.get("sheet")) {
+      document.querySelectorAll("figcaption").forEach(function (c) {
+        c.textContent = c.textContent + " · " + q.get("sheet");
+      });
+      if (new URLSearchParams(location.search).get("zoom")) document.querySelector(".stage").classList.add("zoomed");
+    } else if (new URLSearchParams(location.search).get("p")) {
+      var p = new URLSearchParams(location.search).get("p");
+      document.body.innerHTML =
+        '<figure><figcaption>' + p + '</figcaption><iframe id="f" src="' + p + '"></iframe></figure>';
+    }
+  </script>
+</body>
+</html>
